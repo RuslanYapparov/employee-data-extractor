@@ -1,0 +1,350 @@
+
+"openapi": "3.1.0"
+"info":
+  "title": "Спецификация API сервера информации о работниках"
+  "description": "Имитирует запросы для получения данных работников из базы данных АСУТР"
+  "version": "1.0"
+"servers":
+  -
+    "description": "ede-server default url"
+    "url": "http://localhost:8072"
+"tags":
+  -
+    "description": "Единственный эндпоинт для получения расширенной информации о работниках"
+    "name": "Работники"
+"paths":
+  "/api/v1/employees":
+    "get":
+      "parameters":
+        -
+          "description": "Список табельных номеров - идентификаторов в АСУТР"
+          "in": "query"
+          "name": "emplNumbers"
+          "schema":
+            "type": "array"
+            "items":
+              "type": "integer"
+              "format": "int64"
+              "examples":
+                -
+                  - 1234567
+                  - 7654321
+          "required": true
+      "description": "Получает требуемую информацию о работниках на основании переданного списка табельных  номеров (идентификаторы в АСУТР), если по переданным номерам не найдены работники, то возвращает пустой список"
+      "operationId": "getEmployees"
+      "responses":
+        "200":
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "asutrPersonnelNumber":
+                      "type": "integer"
+                      "description": "табельный номер сотрудника - идентификатор в базе данных АСУТР"
+                      "examples":
+                        - 1234567
+                    "lastName":
+                      "type": "string"
+                      "description": "фамилия сотрудника"
+                      "examples":
+                        - "Апишин"
+                    "firstName":
+                      "type": "string"
+                      "description": "имя сотрудника"
+                      "examples":
+                        - "Апи"
+                    "patronymic":
+                      "type": "string"
+                      "description": "отчество сотрудника"
+                      "examples":
+                        - "Апиевич"
+                    "employeeType":
+                      "type": "string"
+                      "description": "тип должности сотрудника"
+                      "examples":
+                        - "РУКОВОДИТЕЛЬ"
+                    "jobTitleAbbreviation":
+                      "type": "string"
+                      "description": "аббревиатура должности"
+                      "examples":
+                        - "ТС"
+                    "fullJobTitle":
+                      "type": "string"
+                      "description": "полное название должности"
+                      "examples":
+                        - "Тестовый сотрудник"
+                    "employmentDate":
+                      "type": "string"
+                      "description": "дата трудоустройства (в формате \"dd-MM-yyyy\")"
+                      "examples":
+                        - "27-07-2020"
+                    "employmentLength":
+                      "type": "number"
+                      "description": "продолжительность работы в компании"
+                      "examples":
+                        - 4.567
+                    "atPositionSince":
+                      "type": "string"
+                      "description": "дата начала работы в текущей должности (в формате \"dd-MM-yyyy\")"
+                      "examples":
+                        - "27-07-2022"
+                    "atPositionJobLength":
+                      "type": "number"
+                      "description": "продолжительность работы в текущей должности"
+                      "examples":
+                        - 2.567
+                    "edType":
+                      "type": "string"
+                      "description": "тип образования"
+                      "examples":
+                        - "HIGHER_EDUCATION"
+                      "enum":
+                        - "N_A"
+                        - "PRIMARY_EDUCATION"
+                        - "BASIC_EDUCATION"
+                        - "SECONDARY_EDUCATION"
+                        - "SPECIAL_EDUCATION"
+                        - "SPECIAL_PROFILE_EDUCATION"
+                        - "HIGHER_EDUCATION"
+                        - "HIGHER_EDUCATION_NOT_ENDED"
+                        - "HIGHER_PROFILE_EDUCATION"
+                        - "POSTGRADUATE_EDUCATION"
+                    "edInstitutionName":
+                      "type": "string"
+                      "description": "Наименование оконченного учебного заведения"
+                      "examples":
+                        - "Апишная высшая школа описания интерфейсов"
+                    "faculty":
+                      "type": "string"
+                      "description": "факультет, специальность"
+                      "examples":
+                        - "Факультет get-методов"
+                    "edGraduationYear":
+                      "type": "integer"
+                      "format": "int32"
+                      "description": "год окончания учебного заведения"
+                      "examples":
+                        - 2018
+                  "examples":
+                    -
+                      "asutrPersonnelNumber": 1234567
+                      "lastName": "Апишин"
+                      "firstName": "Апи"
+                      "patronymic": "Апиевич"
+                      "employeeType": "РУКОВОДИТЕЛЬ"
+                      "jobTitleAbbreviation": "ТС"
+                      "fullJobTitle": "Тестовый сотрудник"
+                      "employmentDate": "27-07-2020"
+                      "employmentLength": 4.567
+                      "atPositionSince": "27-07-2022"
+                      "atPositionJobLength": 2.567
+                      "edType": "HIGHER_EDUCATION"
+                      "edInstitutionName": "Апишная высшая школа описания интерфейсов"
+                      "faculty": "Факультет get-методов"
+                      "edGraduationYear": 2018
+          "description": "Поиск расширенной информации о работниках произведен без выброса исключений"
+        "500":
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "timestamp":
+                    "type": "string"
+                    "description": "Дата и время когда произошло исключение (в формате \"dd-MM-yyyy HH:mm:ss.SS\")"
+                    "examples":
+                      - "27-07-2024 07:07:07.77"
+                  "exception":
+                    "type": "string"
+                    "description": "Наименование исключения"
+                    "examples":
+                      - "NullPointerException"
+                  "message":
+                    "type": "string"
+                    "description": "Сообщение, с которым было выброшено исключение"
+                    "examples":
+                      - "Не указан обязательный параметр при запросе данных"
+                  "details":
+                    "type": "string"
+                    "description": "Дополнительная информация, касающаяся исключения"
+                    "examples":
+                      - "stacktrace"
+                "description": "DTO, содержащий данные о возникшем исключении"
+              "example":
+                "timestamp": "27-07-2024 09:10:50.77"
+                "exception": "ArrayIndexOutOfBoundsException"
+                "message": "Array index out of range: -1"
+                "details": "... stacktrace ..."
+          "description": "Произошла ошибка на серевере во время операции поиска информации о работниках"
+        "400":
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "timestamp":
+                    "type": "string"
+                    "description": "Дата и время когда произошло исключение (в формате \"dd-MM-yyyy HH:mm:ss.SS\")"
+                    "examples":
+                      - "27-07-2024 07:07:07.77"
+                  "exception":
+                    "type": "string"
+                    "description": "Наименование исключения"
+                    "examples":
+                      - "NullPointerException"
+                  "message":
+                    "type": "string"
+                    "description": "Сообщение, с которым было выброшено исключение"
+                    "examples":
+                      - "Не указан обязательный параметр при запросе данных"
+                  "details":
+                    "type": "string"
+                    "description": "Дополнительная информация, касающаяся исключения"
+                    "examples":
+                      - "stacktrace"
+                "description": "DTO, содержащий данные о возникшем исключении"
+              "example":
+                "timestamp": "27-07-2024 09:10:50.77"
+                "exception": "NotSupportedValueException"
+                "message": "Value \"s127890w\" is not supported as method parameter"
+                "details": "... stacktrace ..."
+          "description": "Исключение возникло из-за неверного запроса"
+      "summary": "Получение расширенной информации о работниках"
+      "tags":
+        - "Работники"
+"components":
+  "schemas":
+    "ExceptionDto":
+      "type": "object"
+      "properties":
+        "timestamp":
+          "type": "string"
+          "description": "Дата и время когда произошло исключение (в формате \"dd-MM-yyyy HH:mm:ss.SS\")"
+          "examples":
+            - "27-07-2024 07:07:07.77"
+        "exception":
+          "type": "string"
+          "description": "Наименование исключения"
+          "examples":
+            - "NullPointerException"
+        "message":
+          "type": "string"
+          "description": "Сообщение, с которым было выброшено исключение"
+          "examples":
+            - "Не указан обязательный параметр при запросе данных"
+        "details":
+          "type": "string"
+          "description": "Дополнительная информация, касающаяся исключения"
+          "examples":
+            - "stacktrace"
+      "description": "DTO, содержащий данные о возникшем исключении"
+    "AsutrEmployeeDto":
+      "type": "object"
+      "properties":
+        "asutrPersonnelNumber":
+          "type": "integer"
+          "description": "табельный номер сотрудника - идентификатор в базе данных АСУТР"
+          "examples":
+            - 1234567
+        "lastName":
+          "type": "string"
+          "description": "фамилия сотрудника"
+          "examples":
+            - "Апишин"
+        "firstName":
+          "type": "string"
+          "description": "имя сотрудника"
+          "examples":
+            - "Апи"
+        "patronymic":
+          "type": "string"
+          "description": "отчество сотрудника"
+          "examples":
+            - "Апиевич"
+        "employeeType":
+          "type": "string"
+          "description": "тип должности сотрудника"
+          "examples":
+            - "РУКОВОДИТЕЛЬ"
+        "jobTitleAbbreviation":
+          "type": "string"
+          "description": "аббревиатура должности"
+          "examples":
+            - "ТС"
+        "fullJobTitle":
+          "type": "string"
+          "description": "полное название должности"
+          "examples":
+            - "Тестовый сотрудник"
+        "employmentDate":
+          "type": "string"
+          "description": "дата трудоустройства (в формате \"dd-MM-yyyy\")"
+          "examples":
+            - "27-07-2020"
+        "employmentLength":
+          "type": "number"
+          "description": "продолжительность работы в компании"
+          "examples":
+            - 4.567
+        "atPositionSince":
+          "type": "string"
+          "description": "дата начала работы в текущей должности (в формате \"dd-MM-yyyy\")"
+          "examples":
+            - "27-07-2022"
+        "atPositionJobLength":
+          "type": "number"
+          "description": "продолжительность работы в текущей должности"
+          "examples":
+            - 2.567
+        "edType":
+          "type": "string"
+          "description": "тип образования"
+          "examples":
+            - "HIGHER_EDUCATION"
+          "enum":
+            - "N_A"
+            - "PRIMARY_EDUCATION"
+            - "BASIC_EDUCATION"
+            - "SECONDARY_EDUCATION"
+            - "SPECIAL_EDUCATION"
+            - "SPECIAL_PROFILE_EDUCATION"
+            - "HIGHER_EDUCATION"
+            - "HIGHER_EDUCATION_NOT_ENDED"
+            - "HIGHER_PROFILE_EDUCATION"
+            - "POSTGRADUATE_EDUCATION"
+        "edInstitutionName":
+          "type": "string"
+          "description": "Наименование оконченного учебного заведения"
+          "examples":
+            - "Апишная высшая школа описания интерфейсов"
+        "faculty":
+          "type": "string"
+          "description": "факультет, специальность"
+          "examples":
+            - "Факультет get-методов"
+        "edGraduationYear":
+          "type": "integer"
+          "format": "int32"
+          "description": "год окончания учебного заведения"
+          "examples":
+            - 2018
+      "examples":
+        -
+          "asutrPersonnelNumber": 1234567
+          "lastName": "Апишин"
+          "firstName": "Апи"
+          "patronymic": "Апиевич"
+          "employeeType": "РУКОВОДИТЕЛЬ"
+          "jobTitleAbbreviation": "ТС"
+          "fullJobTitle": "Тестовый сотрудник"
+          "employmentDate": "27-07-2020"
+          "employmentLength": 4.567
+          "atPositionSince": "27-07-2022"
+          "atPositionJobLength": 2.567
+          "edType": "HIGHER_EDUCATION"
+          "edInstitutionName": "Апишная высшая школа описания интерфейсов"
+          "faculty": "Факультет get-методов"
+          "edGraduationYear": 2018
