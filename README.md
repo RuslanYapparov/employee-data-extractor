@@ -1,6 +1,6 @@
 [По-русски](doc%2Freadme%2FREADME_rus.md)
 
-# Explore with me
+# Employee-data-extractor
 
 ___
 
@@ -10,7 +10,7 @@ resources management database system (ASUTR).*
 
 ___
 
-![](\doc\readme\asutr.jpg)
+![asutr.jpg](doc%2Freadme%2Fasutr.jpg)
 When creating protocols for JSC "Russian Railways" that investigate transport process violations or other incidents
 caused by employees of divisions, it becomes necessary to specify information regarding the duration of employment in the
 company, job tenure, and educational background. To obtain this data, engineers typically contact the HR department,
